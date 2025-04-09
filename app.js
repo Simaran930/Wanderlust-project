@@ -15,7 +15,7 @@ const listingRouter =require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 
-
+const Listing=require("./models/listing.js");
 const session=require("express-session");
 const MongoStore = require('connect-mongo');
 const flash=require("connect-flash");
@@ -82,15 +82,12 @@ app.use((req,res,next)=>{
     next();
 })
 
-app.get("/demouser",async(req,res)=>{
-    let fakeuser=new User({
-        email:"sim@gmail.com",
-        username:"delta-student"
-    });
-    let registeruser=await User.register(fakeuser,"helloworld");
-    res.send(registeruser);
-})
 
+app.get('/', async(req, res) => {
+    const allListings=await Listing.find({});
+    res.render("listings/index.ejs",{allListings}); // will render views/home.ejs
+  });
+  
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);

@@ -1,29 +1,70 @@
 <% layout("/layouts/boilerplate")%>
-
 <style>
-  #filters{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  .filters-wrapper {
+    position: relative;
   }
-  .filter{
+
+  .filters-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 10px 48px;
+    margin-bottom: 1rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+  }
+  .filters-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+  .filter {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
     text-align: center;
-    margin-right: 2rem;
-    margin-top: 2rem;
+    cursor: pointer;
+    min-width: 72px;
+    font-size: 0.9rem;
+    color: #444;
     opacity: 0.7;
   }
   .filter:hover{
     opacity: 1;
     cursor: pointer;
   }
+  .filter i {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: #333;
+  }
 
-.filter p{
-  font-size: 0.8rem;
-}
-.taxinfo{
-  display: none;
-}
-.tax-toggle{
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  .arrow-left {
+    left: -10px;
+  }
+
+  .arrow-right {
+    right: -17px;
+  }
+  .tax{
   border: 1px solid black;
   border-radius: 1rem;
   height: 3.25rem;
@@ -31,64 +72,60 @@
   margin-left: 2rem;
   display: flex;
   align-items: center;
-}
+  }
+  /* Hide arrows on small screens if not needed */
+  @media (max-width: 576px) {
+    .slider-arrow {
+      display: none;
+    }
+  }
 </style>
 
-<body>
-    <div id="filters">
-      <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></i></div>
-        <p>Iconic cities</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-mountain-sun"></i></div>
-        <p>Mountains</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing pools</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-ship"></i></div>
-        <p>Boats</p>
-      </div>
-      <div class="filter">
-        <div><i class="fas fa-flag-checkered"></i></div>
-        <p>Top of the world</p>
-      </div>
 
-      <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-          <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-          <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-        </div>
-      </div>
-      
+<body>
+  <div class="container-fluid py-3 filters-wrapper">
+
+    <!-- Left Arrow -->
+    <div class="slider-arrow arrow-left" onclick="scrollFilters(-200)">
+      <i class="fa-solid fa-chevron-left"></i>
     </div>
+  
+    <!-- Filter Items -->
+    <div id="filters" class="filters-container">
+      <div class="filter"><i class="fa-solid fa-fire"></i><p>Trending</p></div>
+      <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
+      <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Cities</p></div>
+      <div class="filter"><i class="fa-solid fa-mountain-sun"></i><p>Mountains</p></div>
+      <div class="filter"><i class="fa-brands fa-fort-awesome"></i><p>Castles</p></div>
+      <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Pools</p></div>
+      <div class="filter"><i class="fa-solid fa-campground"></i><p>Camping</p></div>
+      <div class="filter"><i class="fa-solid fa-cow"></i><p>Farms</p></div>
+      <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
+      <div class="filter"><i class="fa-solid fa-ship"></i><p>Boats</p></div>
+      <div class="filter"><i class="fas fa-flag-checkered"></i><p>Top</p></div>
+    </div>
+  
+    <!-- Right Arrow -->
+    <div class="slider-arrow arrow-right" onclick="scrollFilters(200)">
+      <i class="fa-solid fa-chevron-right"></i>
+    </div>
+  
+    <!-- Tax Toggle -->
+    <div class="tax-toggle mt-3 tax">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+        <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function scrollFilters(distance) {
+      const container = document.getElementById('filters');
+      container.scrollBy({ left: distance, behavior: 'smooth' });
+    }
+  </script>
+
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(let listing of allListings){ %>
             <a href="/listings/<%=listing._id%>" class="listing-link">

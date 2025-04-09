@@ -12,6 +12,8 @@ const upload=multer({storage});
 
 const listingController=require("../controllers/listings.js");
 
+
+
 //Index Route & create route
 router
     .route("/")
